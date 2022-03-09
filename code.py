@@ -32,7 +32,19 @@ def GibbsSampler(nchain, initialisation, data) :
     ## Mise a jour de  Tau
     chain[i+1,2] = np.random.normal(,)
     ## Mise a jour de  Gamma
-    chain[i+1,3] = np.random.normal(, 
+ 
+        prop = chain[i,3] + 
+        
+        top = 
+        bottom = 
+        acc_prob = np.exp(top - bottom)
+        
+        if np.random.uniform() < acc_prob:
+            chain[i+1,3] = prop
+        else:
+            chain[i+1,3] = chain[i,3]
+            
+        chain[i+1,3] = np.random.normal()
         
         
         
