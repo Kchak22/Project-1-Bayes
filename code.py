@@ -1,1 +1,5 @@
-def density(x, alpha, beta, tau, gamma, data):
+import numpy as np
+import numpy.random as rd
+
+def log_density(x, alpha, beta, tau, gamma, data):
+  
