@@ -26,18 +26,19 @@ def GibbsSampler(nchain, initialisation, data, param=param_defaut) :
     chain[i+1,2] = np.random.normal(,)
     ## Mise a jour de  Gamma
  
-        prop = chain[i,3] + 
+    prop = chain[i,3] + 
         
-        top = 
-        bottom = 
-        acc_prob = np.exp(top - bottom)
+    top = top = log_dens_gamma(chain[i,3], chain[i,0], chain[i,1], chain[i,2])
+    bottom =log_dens_gamma(chain[i-1,3], chain[i-1,0], chain[i-1,1], chain[i-1,2])
+       
+    acc_prob = np.exp(top - bottom)
         
-        if np.random.uniform() < acc_prob:
-            chain[i+1,3] = prop
-        else:
-            chain[i+1,3] = chain[i,3]
+    if np.random.uniform() < acc_prob:
+        chain[i+1,3] = prop
+    else:
+        chain[i+1,3] = chain[i,3]
             
-        chain[i+1,3] = np.random.normal()
+    chain[i+1,3] = np.random.normal()
         
         
         
