@@ -2,18 +2,9 @@ import numpy as np
 import numpy.random as rd
 import matplotlib.pyplot as plt
 
+
 def log_dens_gamma(gamma, alpha, beta, data):
-  #Data must be an array
-  
-    if tau <= 0 or alpha <= 1 or beta <= 1 or gamma < 0 or gamma > 1:
-        return 0
-  
-    n = len(data)
-    dens = 0
-    
-    for i in range(n):
-        dens += np.log(data[i, 1] - alpha + beta*gamma**data[i, 0])
-    
+    dens  = data[:, 1].sum() - alpha + beta*np.power(gamma, data[:, 0])[0]
     return dens
 
   
