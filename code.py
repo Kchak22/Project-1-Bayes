@@ -4,6 +4,9 @@ import matplotlib.pyplot as plt
 
 
 def log_dens_gamma(gamma, alpha,beta, data):
+    if gamma <= 0 or gamma >= 1:
+        return 0
+    
     dens  = data[:, 1].sum() - alpha + beta*np.power(gamma, data[:, 0]).sum()
     return dens
 
@@ -29,7 +32,7 @@ def GibbsSampler(nchain, initialisation, data, param=param_defaut) :
     chain[i+1,2] = rd.gamma(shape = params[2] + n/2, scale = 2/np.power(data[:, 1].sum() - alpha + beta*np.power(gamma, data[:, 0])[0], 2))
     
     ## Mise a jour de  Gamma
-    prop = chain[i,3] + 
+    prop = chain[i,3] + rd.uniform(-0.1, 0.1)
         
     top = top = log_dens_gamma(chain[i,3], chain[i,0], chain[i,1], chain[i,2])
     bottom =log_dens_gamma(chain[i-1,3], chain[i-1,0], chain[i-1,1], chain[i-1,2])
