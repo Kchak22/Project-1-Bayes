@@ -15,3 +15,29 @@ def log_density(x, alpha, beta, tau, gamma, data):
         dens += beta*gamma**data[i,0]
     
     return dens
+
+  
+def GibbsSampler(nchain, initialisation, data) :
+   ## nchain: taille de la chaine
+   
+   # Initialisation 
+    chain = np.zeros((nchain + 1, 4))
+    chain[0,:] = 
+    
+   for i in range(nchain):
+    ## Mise a jour de alpha
+    chain[i+1,0] = np.random.normal(,)
+    ## Mise a jour de  Beta
+    chain[i+1,1] = np.random.normal(, )
+    ## Mise a jour de  Tau
+    chain[i+1,2] = np.random.normal(,)
+    ## Mise a jour de  Gamma
+    chain[i+1,3] = np.random.normal(, 
+        
+        
+        
+        
+        
+    
+       
+        
