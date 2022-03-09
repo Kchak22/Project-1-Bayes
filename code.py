@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 
 def log_dens_gamma(gamma, alpha,beta, data):
-    dens  = data[:, 1].sum() - alpha + beta*np.power(gamma, data[:, 0])[0]
+    dens  = data[:, 1].sum() - alpha + beta*np.power(gamma, data[:, 0]).sum()
     return dens
 
  param_defaut=[mu_alpha, sigma_alpha, mu_beta, sigma_beta, mu_tau, sigma_beta,sigma]
