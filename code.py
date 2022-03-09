@@ -1,5 +1,6 @@
 import numpy as np
 import numpy.random as rd
+import matplotlib.pyplot as plt
 
 def log_density(x, alpha, beta, tau, gamma, data):
   #Data must be an array
