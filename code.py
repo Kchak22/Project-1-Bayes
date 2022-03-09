@@ -7,8 +7,10 @@ def log_dens_gamma(gamma, alpha,beta, data):
     dens  = data[:, 1].sum() - alpha + beta*np.power(gamma, data[:, 0]).sum()
     return dens
 
-    sigma=1/sqrt(tau)
-    param_defaut=[mu_alpha, sigma_alpha, mu_beta, sigma_beta, mu_tau, sigma_beta,sigma]
+sigma=1/sqrt(tau)
+param_defaut=[mu_alpha, sigma_alpha, mu_beta, sigma_beta, mu_tau, sigma_beta,sigma]
+    
+    
 def GibbsSampler(nchain, initialisation, data, param=param_defaut) :
    ## nchain: taille de la chaine
    
@@ -23,9 +25,10 @@ def GibbsSampler(nchain, initialisation, data, param=param_defaut) :
     ## Mise a jour de  Beta
     chain[i+1,1] = np.random.normal(, )
     ## Mise a jour de  Tau
-    chain[i+1,2] = np.random.normal(,)
+    #scale = 1/beta
+    chain[i+1,2] = rd.gamma(shape = params[2] + n/2, scale = 2/np.power(data[:, 1].sum() - alpha + beta*np.power(gamma, data[:, 0])[0], 2))
+    
     ## Mise a jour de  Gamma
- 
     prop = chain[i,3] + 
         
     top = top = log_dens_gamma(chain[i,3], chain[i,0], chain[i,1], chain[i,2])
