@@ -7,6 +7,6 @@ def log_density(x, alpha, beta, tau, gamma, data):
   dens = -n/2*np.log(tau) - n*alpha/2 - 1/(2*tau)*data[:,1].sum()
   
   for i in range(n):
-    dens += gamma**data[i,0]
+    dens += beta*gamma**data[i,0]
   
   return dens
