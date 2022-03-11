@@ -12,7 +12,8 @@ def log_dens_gamma(gamma, alpha,beta, data):
 
 sigma=1/sqrt(tau)
 param_defaut=[mu_alpha, sigma_alpha, mu_beta, sigma_beta, mu_tau, sigma_beta,sigma]
-    
+
+# Test 
     
 def GibbsSampler(nchain, initialisation, data, param=param_defaut) :
    ## nchain: taille de la chaine
