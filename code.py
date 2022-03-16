@@ -26,9 +26,28 @@ def GibbsSampler(nchain, initialisation, data, param=param_defaut) :
     ## Mise a jour de alpha
     chain[i+1,0] = np.random.normal((1/(1/param[1]**2)+n/param[6]**2)*(param[0]/param[1]**2+sum(data[:,1]+beta*gamma**data[:0])/param[6]),\
                                     1/(1/param[1]**2+n/param[6]))
+    
+    
     ## Mise a jour de  Beta
-    chain[i+1,1] = np.random.normal((1/(1/param[3]**2)+n/param[6]**2)*(param[2]/param[3]**2+sum(data[:,1]+beta*gamma**data[:0])/param[6]),\
-                                    1/(1/param[3]**2+n/param[6]))
+    numerateur_mu= 0
+    denominateur= 0
+    mu_bet = 0
+    for k in range(n):
+        numerateur_mu += ((data[k,1]+chain[i,0])*chain[i,3]**(-data[k,0]/2))/param[6]**2+param[3]**2*
+        denominateur += (param[3]**2)*chain[i,3]**(data[k,0]/2)
+    denominateur +=  param[6]**2 
+    mu_bet=numerateur_mu/denominateur
+    sig_bet= (param[6]**2 + param[3]**2)/denominateur
+    
+    
+    
+    
+    
+    chain[i+1,1] = np.random.normal(mu_bet,sig_bet)
+    
+    
+    
+    
     ## Mise a jour de  Tau
     #scale = 1/beta
     chain[i+1,2] = rd.gamma(shape = params[2] + n/2, scale = 2/np.power(data[:, 1].sum() - alpha + beta*np.power(gamma, data[:, 0])[0], 2))
@@ -58,7 +77,7 @@ data = np.array([[1, 1.5, 1.5, 1.5, 2.5, 4, 5, 5, 7, 8, 8.5, 9, 9.5, 9.5, 10, 12
 
 
 nchain=100
-param_defaut=[0.0, 10**(-6), 0.0, 10**(-6), 0.001, 0.001,1000]
+param_defaut=[0.0, 10**(-6), 0.0, 10**(-6), 0.001, 0.001,1/np.sqrt(0.001)]
 
 
 chain = GibbsSampler(nchain, initialisation, data, param_defaut)   
