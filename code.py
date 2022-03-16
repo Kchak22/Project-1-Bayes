@@ -11,7 +11,7 @@ def log_dens_gamma(gamma, alpha, beta, tau, data):
     return -tau*dens/2
 
 #sigma=1/np.sqrt(tau)
-#param_defaut=[mu_alpha, sigma_alpha, mu_beta, sigma_beta, mu_tau, sigma_tau,sigma]
+#param_defaut=[mu_alpha, sigma_alpha, mu_beta, sigma_beta, alpha_tau, beta_tau]
 
 # Test 
     
@@ -73,7 +73,7 @@ data = np.transpose(np.array([[1, 1.5, 1.5, 1.5, 2.5, 4, 5, 5, 7, 8, 8.5, 9, 9.5
 
 
 nchain=10000
-param_defaut=[0.0, 10**6, 0.0, 10**6, 0.001, 0.001,1/np.sqrt(0.001)]
+param_defaut=[0.0, 10**6, 0.0, 10**6, 0.001, 0.001]
 
 
 chain = GibbsSampler(nchain, initialisation, data, param_defaut)   
