@@ -24,10 +24,11 @@ def GibbsSampler(nchain, initialisation, data, param=param_defaut) :
     
    for i in range(nchain):
     ## Mise a jour de alpha
-    chain[i+1,0] = np.random.normal((1/(1/param[1]**2)+n/param[6]**2)*(param[0]/param[1]**2+sum(data[:,1])/param[6]),\
+    chain[i+1,0] = np.random.normal((1/(1/param[1]**2)+n/param[6]**2)*(param[0]/param[1]**2+sum(data[:,0])/param[6]),\
                                     1/(1/param[1]**2+n/param[6]))
     ## Mise a jour de  Beta
-    chain[i+1,1] = np.random.normal(, )
+    chain[i+1,1] = np.random.normal((1/(1/param[3]**2)+n/param[6]**2)*(param[2]/param[3]**2+sum(data[:,0])/param[6]),\
+                                    1/(1/param[3]**2+n/param[6]))
     ## Mise a jour de  Tau
     #scale = 1/beta
     chain[i+1,2] = rd.gamma(shape = params[2] + n/2, scale = 2/np.power(data[:, 1].sum() - alpha + beta*np.power(gamma, data[:, 0])[0], 2))
