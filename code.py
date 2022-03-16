@@ -17,6 +17,7 @@ def log_dens_gamma(gamma, alpha, beta, tau, data):
     
 def GibbsSampler(nchain, initialisation, data, param=param_defaut) :
    ## nchain: taille de la chaine
+   #chain[i,] = [alpha, beta, tau, gamma]
    
    # Initialisation 
    chain = np.zeros((nchain + 1, 4))
