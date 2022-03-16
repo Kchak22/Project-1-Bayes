@@ -47,7 +47,7 @@ def GibbsSampler(nchain, initialisation, data, param=param_defaut) :
     
     ## Mise a jour de  Tau
     #scale = 1/beta
-    chain[i+1,2] = rd.gamma(shape = param[2] + n/2, scale = 2/np.power(data[:, 1].sum() - chain[i,0] + chain[i,1]*np.power(chain[i,3], data[:, 0])[0], 2))
+    chain[i+1,2] = rd.gamma(shape = param[5] + len(data)/2, scale = 2/(param[6] + np.power(data[:, 1].sum() - alpha + beta*np.power(gamma, data[:, 0])[0], 2)))
     
     ## Mise a jour de  Gamma
     prop = chain[i,3] + rd.uniform(-0.1, 0.1)
