@@ -8,7 +8,7 @@ def log_dens_gamma(gamma, alpha, beta, tau, data):
         return 0
     
     dens  = data[:, 1].sum() - alpha + beta*np.power(gamma, data[:, 0]).sum()
-    return dens/(2*tau)
+    return tau*dens/2
 
 #sigma=1/np.sqrt(tau)
 #param_defaut=[mu_alpha, sigma_alpha, mu_beta, sigma_beta, mu_tau, sigma_tau,sigma]
