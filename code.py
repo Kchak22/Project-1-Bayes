@@ -34,13 +34,13 @@ def GibbsSampler(nchain, initialisation, data, param=param_defaut) :
     denominateur= 0
     mu_bet = 0
     for k in range(n):
-        numerateur_mu += ((data[k,1]+chain[i,0])*chain[i,3]**(-data[k,0]/2))/param[6]**2+param[3]**2
-        denominateur += (param[3]**2)*chain[i,3]**(data[k,0]/2)
-    denominateur +=  param[6]**2 
+            numerateur_mu += ((data[k,1]+chain[i,0])*chain[i,3]**(-data[k,0]/2))
+            denominateur += chain[i,3]**(data[k,0]/2)
+    denominateur =  denominateur*param[3]**2 + 1/chain[:, 2]
     mu_bet=numerateur_mu/denominateur
-    sig_bet= (param[6]**2 + param[3]**2)/denominateur
+    sig_bet= (1/chain[:,2] + param[3]**2)/denominateur
     
-    chain[i+1,1] = np.random.normal(mu_bet,sig_bet)
+    chain[i+1,1] = np.random.normal(mu_bet, np.sqrt(sig_bet))
     
     
     
