@@ -8,7 +8,7 @@ def log_dens_gamma(gamma, alpha, beta, tau, data):
         return 0
     
     dens  = data[:, 1].sum() - alpha + beta*np.power(gamma, data[:, 0]).sum()
-    return tau*dens/2
+    return -tau*dens/2
 
 #sigma=1/np.sqrt(tau)
 #param_defaut=[mu_alpha, sigma_alpha, mu_beta, sigma_beta, mu_tau, sigma_tau,sigma]
@@ -24,8 +24,8 @@ def GibbsSampler(nchain, initialisation, data, param=param_defaut) :
     
    for i in range(nchain):
     ## Mise a jour de alpha
-    chain[i+1,0] = np.random.normal(loc=(1/(1/param[1]**2)+n/param[6]**2)*(param[0]/param[1]**2+sum(data[:,1]+chain[i,1]*chain[i,3]**data[:,0])/param[6]),\
-                                    scale=1/(1/param[1]**2+n/param[6]))
+    chain[i+1,0] = np.random.normal((1/(1/param[1]**2)+n/param[6]**2)*(param[0]/param[1]**2+sum(data[:,1]+chain[i,1]*chain[i,3]**data[:,0])/param[6]),\
+                                    1/(1/param[1]**2+n/param[6]))
     
     
     ## Mise a jour de  Beta
@@ -51,8 +51,8 @@ def GibbsSampler(nchain, initialisation, data, param=param_defaut) :
     ## Mise a jour de  Gamma
     prop = chain[i,3] + rd.uniform(-0.1, 0.1)
         
-    top = log_dens_gamma(chain[i,3], chain[i,0], chain[i,1], chain[i,2])
-    bottom =log_dens_gamma(chain[i-1,3], chain[i-1,0], chain[i-1,1], chain[i-1,2])
+    top = log_dens_gamma(chain[i,3], chain[i,0], chain[i,1], chain[i,2],data)
+    bottom =log_dens_gamma(chain[i-1,3], chain[i-1,0], chain[i-1,1], chain[i-1,2],data)
        
     acc_prob = np.exp(top - bottom)
         
@@ -72,16 +72,15 @@ data = np.transpose(np.array([[1, 1.5, 1.5, 1.5, 2.5, 4, 5, 5, 7, 8, 8.5, 9, 9.5
                  [1.8, 1.85, 1.87, 1.77, 2.02, 2.27, 2.15, 2.26, 2.47, 2.19, 2.26, 2.4, 2.39, 2.41, 2.5, 2.32, 2.32, 2.43, 2.47, 2.56, 2.65, 2.47, 2.64, 2.56, 2.7, 2.72, 2.57]]))
 
 
-nchain=100
-param_defaut=[0.0, 10**(-6), 0.0, 10**(-6), 0.001, 0.001,1/np.sqrt(0.001)]
+nchain=10000
+param_defaut=[0.0, 10**6, 0.0, 10**6, 0.001, 0.001,1/np.sqrt(0.001)]
 
 
 chain = GibbsSampler(nchain, initialisation, data, param_defaut)   
         
+x=np.arange(nchain+1)
+#plt.scatter(x, chain[:,1], c="r")
+#plt.scatter(x, chain[:,2], c="b")
+plt.scatter(x, chain[:,3], c="y")
 
-plt.scatter(chain[:,0], chain[:,1])
       
-        
-    
-       
-        
