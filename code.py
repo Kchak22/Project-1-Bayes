@@ -19,8 +19,8 @@ def GibbsSampler(nchain, initialisation, data, param=param_defaut) :
    ## nchain: taille de la chaine
    
    # Initialisation 
-    chain = np.zeros((nchain + 1, 4))
-    chain[0,:] = 
+   chain = np.zeros((nchain + 1, 4))
+   chain[0,:] = initialisation
     
    for i in range(nchain):
     ## Mise a jour de alpha
@@ -46,7 +46,7 @@ def GibbsSampler(nchain, initialisation, data, param=param_defaut) :
     else:
         chain[i+1,3] = chain[i,3]
             
-    chain[i+1,3] = np.random.normal()
+   return(chain)
         
         
         
