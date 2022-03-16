@@ -24,8 +24,8 @@ def GibbsSampler(nchain, initialisation, data, param=param_defaut) :
     
    for i in range(nchain):
     ## Mise a jour de alpha
-    chain[i+1,0] = np.random.normal((1/(1/param[1]**2)+n/param[6]**2)*(param[0]/param[1]**2+sum(data[:,1]+chain[i,1]*chain[i,3]**data[:,0])/param[6]),\
-                                    1/(1/param[1]**2+n/param[6]))
+    chain[i+1,0] = np.random.normal(loc = (1/(1/param[1]**2)+n*chain[:,3]**2)  *  sum(data[:,1]+chain[i,1]*chain[i,2]**data[:,0]), 
+                                        scale = 1/np.sqrt(1/param[1]**2+n*chain[:, 3]))
     
     
     ## Mise a jour de  Beta
