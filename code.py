@@ -63,8 +63,9 @@ def GibbsSampler(nchain, initialisation, data, param) :
         ## Mise a jour de  Gamma
         prop = chain[i,3] + rd.uniform(-0.1, 0.1)
         
-        top = log_dens_gamma(chain[i+1,3], chain[i,0], chain[i,1], chain[i,2],data)
         bottom =log_dens_gamma(chain[i,3], chain[i-1,0], chain[i-1,1], chain[i-1,2],data)
+        top = log_dens_gamma(chain[i+1,3], chain[i,0], chain[i,1], chain[i,2],data)
+        
        
         acc_prob = np.exp(top - bottom)
         
