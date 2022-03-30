@@ -54,11 +54,11 @@ def GibbsSampler(nchain, initialisation, data, param) :
         #scale = 1/beta
         sum_scale=0
         for l in range(n):
-                sum_scale+= (data[l,1]-chain[i,0]+chain[i,1]*(chain[i,3]**data[l,0])**2  )    
+                sum_scale+= (data[l,1]-chain[i,0]+chain[i,1]*(chain[i,3]**data[l,0]) )**2  
         sum_scale=1/2*sum_scale+param[5]
         
         
-        chain[i+1,2] = rd.gamma(shape = param[5] + len(data)/2, scale = sum_scale)
+        chain[i+1,2] = rd.gamma(shape = param[4] + len(data)/2, scale = sum_scale)
     
         ## Mise a jour de  Gamma
         prop = chain[i,3] + rd.uniform(-0.1, 0.1)
@@ -92,6 +92,6 @@ param_defaut=[0.0, 10**6, 0.0, 10**6, 0.001, 0.001]
 chain = GibbsSampler(nchain, initialisation, data, param_defaut)   
         
 x=np.arange(nchain+1)
-#plt.scatter(x, chain[:,1], c="r")
-#plt.scatter(x, chain[:,2], c="b")
-plt.scatter(x, chain[:,3], c="y")
+#plt.plot(x, chain[:,1], c="r")
+#plt.plot(x, chain[:,2], c="b")
+#plt.plot(x[1000:], chain[1000:,3], c="y")
