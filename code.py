@@ -5,10 +5,13 @@ import matplotlib.pyplot as plt
 
 def log_dens_gamma(gamma, alpha, beta, tau, data):
     if gamma <= 0 or gamma >= 1:
-        return 0
+        return -10**12
     
-    dens  = data[:, 1].sum() - alpha + beta*np.power(gamma, data[:, 0]).sum()
-    return -tau*dens/2
+    dens = 0
+    for i in range(len(data)):
+        dens  += (data[i, 1] - alpha + beta*gamma**data[i, 0])**2
+        
+    return tau*dens/2
 
 #sigma=1/np.sqrt(tau)
 #param_defaut=[mu_alpha, sigma_alpha, mu_beta, sigma_beta, alpha_tau, beta_tau]
@@ -18,6 +21,7 @@ def log_dens_gamma(gamma, alpha, beta, tau, data):
 def GibbsSampler(nchain, initialisation, data, param) :
    ## nchain: taille de la chaine
    #chain[i,] = [alpha, beta, tau, gamma]
+    accept_gam = 0
    
    # Initialisation 
     chain = np.zeros((nchain + 1, 4))
@@ -39,13 +43,13 @@ def GibbsSampler(nchain, initialisation, data, param) :
         denominateur= 0
         mu_bet = 0
         for k in range(n):
-                numerateur_mu += (data[k,1]+chain[i,0])* (chain[i,3]**(-data[k,0]/2))
+                numerateur_mu += (data[k,1]+chain[i+1,0])* (chain[i,3]**(-data[k,0]/2))
                 denominateur += chain[i,3]**(data[k,0]/2)
         denominateur =  denominateur*param[3]**2 + 1/chain[i, 2]
         mu_bet=numerateur_mu/denominateur
-        sig_bet= (1/chain[i,2] + param[3]**2)/denominateur
+        var_beta= (1/chain[i,2] + param[3]**2)/denominateur
     
-        chain[i+1,1] = np.random.normal(mu_bet, np.sqrt(sig_bet))
+        chain[i+1,1] = np.random.normal(mu_bet, np.sqrt(var_beta))
     
     
     
@@ -54,27 +58,28 @@ def GibbsSampler(nchain, initialisation, data, param) :
         #scale = 1/beta
         sum_scale=0
         for l in range(n):
-                sum_scale+= (data[l,1]-chain[i,0]+chain[i,1]*(chain[i,3]**data[l,0]) )**2  
+                sum_scale+= (data[l,1]-chain[i+1,0]+chain[i+1,1]*(chain[i,3]**data[l,0]) )**2  
         sum_scale=1/2*sum_scale+param[5]
         
         
-        chain[i+1,2] = rd.gamma(shape = param[4] + len(data)/2, scale = sum_scale)
+        chain[i+1,2] = rd.gamma(shape = param[4] + len(data)/2, scale = 1/sum_scale)
     
         ## Mise a jour de  Gamma
-        prop = chain[i,3] + rd.uniform(-0.1, 0.1)
+        prop = chain[i,3] + rd.uniform(-0.9, 0.9)
         
-        bottom =log_dens_gamma(chain[i,3], chain[i-1,0], chain[i-1,1], chain[i-1,2],data)
-        top = log_dens_gamma(chain[i+1,3], chain[i,0], chain[i,1], chain[i,2],data)
+        bottom =log_dens_gamma(chain[i,3], chain[i+1,0], chain[i+1,1], chain[i+1,2],data)
+        top = log_dens_gamma(prop, chain[i+1,0], chain[i+1,1], chain[i+1,2],data)
         
        
         acc_prob = np.exp(top - bottom)
         
         if np.random.uniform() < acc_prob:
             chain[i+1,3] = prop
+            accept_gam += 1
         else:
             chain[i+1,3] = chain[i,3]
             
-    return(chain)
+    return(chain, accept_gam/nchain)
         
 #initilaisation des paramètres
 initialisation = [1,1,1,0.9]
@@ -86,12 +91,15 @@ data = np.transpose(np.array([[1, 1.5, 1.5, 1.5, 2.5, 4, 5, 5, 7, 8, 8.5, 9, 9.5
 
 
 nchain=10000
-param_defaut=[0.0, 10**6, 0.0, 10**6, 0.001, 0.001]
+param_defaut=[0.0, 10**6, 0.0, 10**6, 1, 1]
 
 
-chain = GibbsSampler(nchain, initialisation, data, param_defaut)   
-        
+chain, taux = GibbsSampler(nchain, initialisation, data, param_defaut)   
+
+print(taux)
 x=np.arange(nchain+1)
 #plt.plot(x, chain[:,0], c="r")
-#plt.plot(x, chain[:,2], c="b")
-#plt.plot(x[1000:], chain[1000:,3], c="y")
+#plt.plot(x[1000:], chain[1000:,2], c="b")
+plt.scatter(x[1000:], chain[1000:,3], c="y")
+
+print(np.mean(chain, axis = 0))
