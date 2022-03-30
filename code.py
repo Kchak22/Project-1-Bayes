@@ -29,7 +29,7 @@ def GibbsSampler(nchain, initialisation, data, param) :
         mu_alpha=0
         for k in range(n):
                 mu_alpha += data[k,1]+chain[i,1]*chain[i,3]**data[k,0]
-        mu_alpha=mu_alpha*(1/(1/param[1]**2)+n*chain[i,2]**2)
+        mu_alpha=chain[i, 2]*mu_alpha*(1/(1/param[1]**2)+n*chain[i,2])
         chain[i+1,0] = np.random.normal(loc = mu_alpha, 
                                         scale = 1/np.sqrt(1/param[1]**2+n*chain[i, 2]))
     
@@ -39,7 +39,7 @@ def GibbsSampler(nchain, initialisation, data, param) :
         denominateur= 0
         mu_bet = 0
         for k in range(n):
-                numerateur_mu += ((data[k,1]+chain[i,0])*chain[i,3]**(-data[k,0]/2))
+                numerateur_mu += (data[k,1]+chain[i,0])* (chain[i,3]**(-data[k,0]/2))
                 denominateur += chain[i,3]**(data[k,0]/2)
         denominateur =  denominateur*param[3]**2 + 1/chain[i, 2]
         mu_bet=numerateur_mu/denominateur
@@ -92,6 +92,6 @@ param_defaut=[0.0, 10**6, 0.0, 10**6, 0.001, 0.001]
 chain = GibbsSampler(nchain, initialisation, data, param_defaut)   
         
 x=np.arange(nchain+1)
-#plt.plot(x, chain[:,1], c="r")
+#plt.plot(x, chain[:,0], c="r")
 #plt.plot(x, chain[:,2], c="b")
 #plt.plot(x[1000:], chain[1000:,3], c="y")
