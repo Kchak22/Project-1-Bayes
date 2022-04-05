@@ -42,11 +42,11 @@ def GibbsSampler(nchain, initialisation, data, param) :
     
         ## Mise a jour de  Beta
         
-        denom_beta = 1/(1/tau + param[3]**2 * np.sum(gamma ** (-data[:,0]/2)))
-        mu_beta = np.sum(gamma ** (-data[:,0]/2) * (data[:,1] + alpha))/denom_beta
-        var_beta = (1/tau + param[3]**2)/denom_beta
+        denom_beta = (1+ tau*param[3]**2 * np.sum(gamma ** (data[:,0]*2)))
+        mu_beta = np.sum(gamma ** (data[:,0]) * (-data[:,1] + alpha))/denom_beta
+        var_beta = param[3]**2/denom_beta
         
-        beta = np.random.normal(mu_beta, np.sqrt(var_beta))
+        beta = rd.normal(mu_beta, np.sqrt(var_beta))
     
     
     
